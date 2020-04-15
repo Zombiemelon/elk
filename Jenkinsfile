@@ -2,7 +2,7 @@ pipeline {
     options { timeout(time: 25, unit: 'MINUTES') }
     agent any
     environment {
-        CONTAINER_NAME='vacation_bot'
+        CONTAINER_NAME='elasticsearch'
         ES_CONTAINER_NAME='elasticsearch'
         HOST_ES_PORT=9200
         CONTAINER_ES_PORT=9200
@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage ('Build Back') {
             steps {
-                sh "docker build -t $CONTAINER_NAME:back -f ./docker/elasticsearch/Dockerfile.elasticsearch . "
+                sh "docker build -t $ES_CONTAINER_NAME:back -f ./docker/elasticsearch/Dockerfile.elasticsearch . "
             }
         }
         stage ('Push Image Back') {
@@ -21,10 +21,10 @@ pipeline {
                 script {
                     if (env.GIT_BRANCH == 'origin/master') {
                         sh "\$(/root/.local/bin/aws ecr get-login --no-include-email --region eu-central-1 --profile $AWS_PROFILE)"
-                        sh "docker tag $CONTAINER_NAME:elasticsearch $ECR_ADDRESS:elasticsearch"
+                        sh "docker tag ES_CONTAINER_NAMEE:elasticsearch $ECR_ADDRESS:elasticsearch"
                         sh "docker push $ECR_ADDRESS:elasticsearch"
                         sh "echo \"Delete image\""
-                        sh "docker image rm -f ${CONTAINER_NAME}:elasticsearch && docker image prune -f"
+                        sh "docker image rm -f ${ES_CONTAINER_NAME}:elasticsearch && docker image prune -f"
                     }
                 }
             }
