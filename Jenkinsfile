@@ -6,7 +6,7 @@ pipeline {
         ES_CONTAINER_NAME='elasticsearch'
         HOST_ES_PORT=9200
         CONTAINER_ES_PORT=9200
-        ECR_ADDRESS=credentials('aws_sd_ecr_address')
+        ECR_ADDRESS=credentials('ECR_ADDRESS')
         AWS_PROFILE='default'
         CONFIG='default'
     }
