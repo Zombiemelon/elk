@@ -7,8 +7,8 @@ pipeline {
         HOST_ES_PORT=9200
         CONTAINER_ES_PORT=9200
         ECR_ADDRESS=credentials('aws_sd_ecr_address')
-        AWS_PROFILE='aws_sd'
-        CONFIG='aws_sd'
+        AWS_PROFILE='default'
+        CONFIG='default'
     }
     stages {
         stage ('Build Back') {
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     if (env.GIT_BRANCH == 'origin/master') {
-                        sshPublisher(publishers: [sshPublisherDesc(configName: env.CONFIG, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "\$(aws ecr get-login --no-include-email --region eu-central-1 ); docker pull ${ECR_ADDRESS}:elasticsearch; docker rm -f ${ES_CONTAINER_NAME} ; docker run -e \"discovery.type=single-node\" --name ${ES_CONTAINER_NAME} -d -p ${HOST_ES_PORT}:${CONTAINER_ES_PORT} ${ECR_ADDRESS}:elasticsearch", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                        sshPublisher(publishers: [sshPublisherDesc(configName: env.CONFIG, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "\$(aws ecr get-login --no-include-email --region eu-central-1 ); docker pull ${ECR_ADDRESS}:elasticsearch; docker rm -f ${ES_CONTAINER_NAME} ; docker run -e \"discovery.type=single-node\" -e \"ES_JAVA_OPTS=-Xms100m -Xmx100m\" --name ${ES_CONTAINER_NAME} -d -p ${HOST_ES_PORT}:${CONTAINER_ES_PORT} ${ECR_ADDRESS}:elasticsearch", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     }
                 }
             }
