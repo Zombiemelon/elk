@@ -8,7 +8,7 @@ pipeline {
         CONTAINER_ES_PORT=9200
         ECR_ADDRESS=credentials('ECR_ADDRESS')
         AWS_PROFILE='default'
-        CONFIG='default'
+        CONFIG='deploy'
     }
     stages {
         stage ('Build Back') {
