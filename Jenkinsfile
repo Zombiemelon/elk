@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     if (env.GIT_BRANCH == 'origin/master') {
-                        sshPublisher(publishers: [sshPublisherDesc(configName: env.CONFIG, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "\$(aws ecr get-login --no-include-email --region eu-central-1 ); docker pull ${ECR_ADDRESS}:elasticsearch; docker rm -f ${ES_CONTAINER_NAME} ; docker run -e \"discovery.type=single-node\" -e \"ES_JAVA_OPTS=-Xms512m -Xmx512m\" --name ${ES_CONTAINER_NAME} -d -p ${HOST_ES_PORT}:${CONTAINER_ES_PORT} ${ECR_ADDRESS}:elasticsearch", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                        sshPublisher(publishers: [sshPublisherDesc(configName: env.CONFIG, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "\$(aws ecr get-login --no-include-email --region eu-central-1 ); docker pull ${ECR_ADDRESS}:elasticsearch; docker rm -f ${ES_CONTAINER_NAME} ; docker run -e \"discovery.type=single-node\" -e \"ES_JAVA_OPTS=-Xms256m -Xmx256m\" --name ${ES_CONTAINER_NAME} -d -p ${HOST_ES_PORT}:${CONTAINER_ES_PORT} ${ECR_ADDRESS}:elasticsearch", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     }
                 }
             }
