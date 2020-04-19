@@ -16,7 +16,7 @@ pipeline {
         AWS_PROFILE='default'
         CONFIG='deploy'
     }
-//     stages {
+    stages {
 //         stage ('Build ES') {
 //             steps {
 //                 sh "docker build -t $CONTAINER_NAME:elasticsearch -f ./docker/elasticsearch/Dockerfile.elasticsearch . "
