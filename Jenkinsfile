@@ -7,8 +7,8 @@ pipeline {
         HOST_ES_PORT=9200
         CONTAINER_ES_PORT=9200
         LS_CONTAINER_NAME='logstash'
-        HOST_ES_PORT=5044
-        CONTAINER_ES_PORT=5044
+        HOST_LS_PORT=5044
+        CONTAINER_LS_PORT=5044
         ECR_ADDRESS=credentials('ECR_ADDRESS')
         AWS_PROFILE='default'
         CONFIG='deploy'
@@ -63,7 +63,7 @@ pipeline {
             steps {
                 script {
                     if (env.GIT_BRANCH == 'origin/master') {
-                        sshPublisher(publishers: [sshPublisherDesc(configName: env.CONFIG, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "\$(aws ecr get-login --no-include-email --region eu-central-1 ); docker pull ${ECR_ADDRESS}:logstash; docker rm -f ${LS_CONTAINER_NAME} ; docker run --name ${LS_CONTAINER_NAME} -d -p ${HOST_LS_PORT}:${CONTAINER_LS_PORT} docker.elastic.co/logstash/logstash:7.6.2", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                        sshPublisher(publishers: [sshPublisherDesc(configName: env.CONFIG, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "\$(aws ecr get-login --no-include-email --region eu-central-1 ); docker pull ${ECR_ADDRESS}:logstash; docker rm -f ${LS_CONTAINER_NAME} ; docker run --name ${LS_CONTAINER_NAME} -d -p ${HOST_LS_PORT}:${CONTAINER_LS_PORT} ${ECR_ADDRESS}:logstash", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     }
                 }
             }
