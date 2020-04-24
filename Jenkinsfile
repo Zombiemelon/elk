@@ -56,9 +56,9 @@ pipeline {
             steps {
                 script {
                     if (env.GIT_BRANCH == 'origin/master') {
-                        sh "\$(/root/.local/bin/aws ecr get-login --no-include-email --region eu-central-1 --profile $AWS_PROFILE_LOGSTASH)"
-                        sh "docker tag $CONTAINER_NAME:logstash $ECR_ADDRESS_LOGSTASH:logstash"
-                        sh "docker push $ECR_ADDRESS_LOGSTASH:logstash"
+                        sh "\$(/root/.local/bin/aws ecr get-login --no-include-email --region eu-central-1 --profile $AWS_PROFILE)"
+                        sh "docker tag $CONTAINER_NAME:logstash $ECR_ADDRESS:logstash"
+                        sh "docker push $ECR_ADDRESS:logstash"
                         sh "echo \"Delete image\""
                         sh "docker image rm -f ${CONTAINER_NAME}:logstash && docker image prune -f"
                     }
@@ -69,7 +69,7 @@ pipeline {
             steps {
                 script {
                     if (env.GIT_BRANCH == 'origin/master') {
-                        sshPublisher(publishers: [sshPublisherDesc(configName: env.CONFIG_LOGSTASH, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "\$(aws ecr get-login --no-include-email --region eu-central-1 ); docker pull ${ECR_ADDRESS_LOGSTASH}:logstash; docker rm -f ${LS_CONTAINER_NAME} ; docker run --memory=\"200m\" -e \"LS_JAVA_OPTS=-Xms100m -Xmx100m\" --name ${LS_CONTAINER_NAME} -d -p ${HOST_LS_PORT}:${CONTAINER_LS_PORT} ${ECR_ADDRESS}:logstash", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                        sshPublisher(publishers: [sshPublisherDesc(configName: env.CONFIG_LOGSTASH, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "\$(aws ecr get-login --no-include-email --region eu-central-1 ); docker pull ${ECR_ADDRESS}:logstash; docker rm -f ${LS_CONTAINER_NAME} ; docker run --memory=\"200m\" -e \"LS_JAVA_OPTS=-Xms100m -Xmx100m\" --name ${LS_CONTAINER_NAME} -d -p ${HOST_LS_PORT}:${CONTAINER_LS_PORT} ${ECR_ADDRESS}:logstash", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     }
                 }
             }
