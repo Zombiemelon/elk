@@ -17,7 +17,7 @@ pipeline {
         AWS_PROFILE='default'
         CONFIG='deploy'
         CONFIG_LOGSTASH='aws_logstash'
-        AWS_PROFILE_LOGSTASH='aws_logstash'
+        AWS_PROFILE_LOGSTASH='profile aws_logstash'
     }
     stages {
         stage ('Build ES') {
