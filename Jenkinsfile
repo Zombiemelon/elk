@@ -55,7 +55,7 @@ pipeline {
             steps {
                 script {
                     if (env.GIT_BRANCH == 'origin/master') {
-                        sh "\$(/root/.local/bin/aws ecr get-login --no-include-email --region eu-central-1 --profile $ACONFIG_LOGSTASH)"
+                        sh "\$(/root/.local/bin/aws ecr get-login --no-include-email --region eu-central-1 --profile $AWS_PROFILE)"
                         sh "docker tag $CONTAINER_NAME:logstash $ECR_ADDRESS:logstash"
                         sh "docker push $ECR_ADDRESS:logstash"
                         sh "echo \"Delete image\""
