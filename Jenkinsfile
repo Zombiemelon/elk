@@ -74,33 +74,33 @@ pipeline {
                 }
             }
         }
-//         stage ('Build Kibana') {
-//             steps {
-//                 sh "docker build -t $CONTAINER_NAME:kibana -f ./docker/kibana/Dockerfile . "
-//             }
-//         }
-//         stage ('Push Image Kibana') {
-//             steps {
-//                 script {
-//                     if (env.GIT_BRANCH == 'origin/master') {
-//                         sh "\$(/root/.local/bin/aws ecr get-login --no-include-email --region eu-central-1 --profile $AWS_PROFILE)"
-//                         sh "docker tag $CONTAINER_NAME:kibana $ECR_ADDRESS:kibana"
-//                         sh "docker push $ECR_ADDRESS:kibana"
-//                         sh "echo \"Delete image\""
-//                         sh "docker image rm -f ${CONTAINER_NAME}:kibana && docker image prune -f"
-//                     }
-//                 }
-//             }
-//         }
-//         stage('Deploy Kibana') {
-//             steps {
-//                 script {
-//                     if (env.GIT_BRANCH == 'origin/master') {
-//                         sshPublisher(publishers: [sshPublisherDesc(configName: env.CONFIG, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "\$(aws ecr get-login --no-include-email --region eu-central-1 ); docker pull ${ECR_ADDRESS}:kibana; docker rm -f ${KB_CONTAINER_NAME} ; docker run --memory=\"200m\" --name ${KB_CONTAINER_NAME} -d -p ${HOST_KB_PORT}:${CONTAINER_KB_PORT} ${ECR_ADDRESS}:kibana", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-//                     }
-//                 }
-//             }
-//         }
+        stage ('Build Kibana') {
+            steps {
+                sh "docker build -t $CONTAINER_NAME:kibana -f ./docker/kibana/Dockerfile . "
+            }
+        }
+        stage ('Push Image Kibana') {
+            steps {
+                script {
+                    if (env.GIT_BRANCH == 'origin/master') {
+                        sh "\$(/root/.local/bin/aws ecr get-login --no-include-email --region eu-central-1 --profile $AWS_PROFILE)"
+                        sh "docker tag $CONTAINER_NAME:kibana $ECR_ADDRESS:kibana"
+                        sh "docker push $ECR_ADDRESS:kibana"
+                        sh "echo \"Delete image\""
+                        sh "docker image rm -f ${CONTAINER_NAME}:kibana && docker image prune -f"
+                    }
+                }
+            }
+        }
+        stage('Deploy Kibana') {
+            steps {
+                script {
+                    if (env.GIT_BRANCH == 'origin/master') {
+                        sshPublisher(publishers: [sshPublisherDesc(configName: env.CONFIG, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "\$(aws ecr get-login --no-include-email --region eu-central-1 ); docker pull ${ECR_ADDRESS}:kibana; docker rm -f ${KB_CONTAINER_NAME} ; docker run --memory=\"200m\" --name ${KB_CONTAINER_NAME} -d -p ${HOST_KB_PORT}:${CONTAINER_KB_PORT} ${ECR_ADDRESS}:kibana", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                    }
+                }
+            }
+        }
      }
     post {
         always {
