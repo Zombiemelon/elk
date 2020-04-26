@@ -1,6 +1,7 @@
+http.host: "0.0.0.0"
 xpack.monitoring.enabled: true
 xpack.monitoring.elasticsearch.hosts: [ "3.120.237.214:9200"]
-pipeline.id: HABR
-pipeline.workers: 1
-pipeline.batch.size: 1
-path.config: "/usr/share/logstash/pipeline/logstash.conf"
+#pipeline.id: HABR
+#pipeline.workers: 1
+#pipeline.batch.size: 1
+#path.config: "/usr/share/logstash/pipeline/logstash.conf"
