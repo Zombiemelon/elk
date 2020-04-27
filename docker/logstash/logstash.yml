@@ -1,2 +1,2 @@
 xpack.monitoring.enabled: true
-xpack.monitoring.elasticsearch.hosts: [ "3.120.237.214:9200"]
+xpack.monitoring.elasticsearch.hosts: [ "18.184.85.85:9200"]
